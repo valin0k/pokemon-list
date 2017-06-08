@@ -1,0 +1,35 @@
+.app-container {
+  width: 100%;
+  max-width: 800px;
+  min-width: 200px;
+  margin: 0 auto;
+  background: #fff;
+  margin-top:30px;
+
+  .ui.table thead th.clickable {
+    cursor:pointer;
+  }
+
+  .ui.dimmer {
+      position: fixed;
+  }
+
+  .pokemon-type {
+      opacity: 0.6;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  .pokemon-type:hover {
+      opacity: 0.8;
+      transition: 0.3s;
+  }
+
+  .pokemon-type.active {
+      opacity: 0.8;
+  }
+
+  .pokemon-ability {
+      opacity: 0.4;
+  }
+}
