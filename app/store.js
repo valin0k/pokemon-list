@@ -1,10 +1,7 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
+import {createStore, applyMiddleware, combineReducers} from 'redux'
+import thunk from 'redux-thunk'
 
-import pokemonsReducer from 'app/reactTest/reducers/PokemonsReducer';
-
-const logger = createLogger();
+import pokemonsReducer from 'app/reactTest/reducers/PokemonsReducer'
 
 const rootReducer = combineReducers({
 	pokemonsReducer,
@@ -15,8 +12,8 @@ function configureStore(initialState) {
 		rootReducer,
 		initialState,
     // applyMiddleware(thunk),
-		applyMiddleware(thunk, logger),
+		applyMiddleware(thunk),
 	);
 }
 
-export default configureStore({});
+export default configureStore({})
