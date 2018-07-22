@@ -1,16 +1,22 @@
-import * as actionsTypes from 'app/reactTest/constants/AppConstants';
-import axios from 'axios';
+import * as actionsTypes from 'app/reactTest/constants/AppConstants'
+import axios from 'axios'
 
-export const getPokemonList = (offset = 0) => (dispatch) => {
+export const getPokemonList = (offset = 0, loadedOffsets) => (dispatch) => {
+  if(loadedOffsets && loadedOffsets.includes(offset)) {
+    return dispatch({
+      type: actionsTypes.CHANGE_OFFSET,
+      payload: { offset }
+    })
+  }
+
   dispatch({
     type: actionsTypes.START_LOADING,
   })
 
-  const apiUrl = `http://pokeapi.co/api/v2/pokemon?offset=${offset}`;
+  const apiUrl = `http://pokeapi.co/api/v2/pokemon?offset=${offset}`
 
   return axios(apiUrl)
     .then(pokemonData => {
-
       const promises = pokemonData.data.results.map(item => axios(item.url))
       Promise.all(promises).then(pokemons => {
 				dispatch({
@@ -35,19 +41,23 @@ export const getPokemonList = (offset = 0) => (dispatch) => {
 export const filterPokemons = (keyword) => (dispatch) => {
   dispatch({
     type: actionsTypes.FILTER_POKEMONS,
-    payload: keyword.toLowerCase(),
-  });
-};
+    payload: {
+    	keyword: keyword.toLowerCase()
+		},
+  })
+}
 
 export const addTypePokemon = (keyword) => (dispatch) => {
   dispatch({
     type: actionsTypes.ADD_TYPE_POKEMON,
-    payload: keyword.toLowerCase(),
-  });
-};
+    payload: {
+    	type: keyword.toLowerCase()
+		},
+  })
+}
 
 export const removeTypePokemon = () => (dispatch) => {
   dispatch({
     type: actionsTypes.REMOVE_TYPE_POKEMON,
-  });
-};
+  })
+}

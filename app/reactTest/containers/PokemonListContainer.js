@@ -8,30 +8,31 @@ import {
   removeTypePokemon
 } from "app/reactTest/actions/PokemonsActions"
 
-const mapStateToProps = ({ pokemons }) => {
-  const { filterKeyword, filterLabel } = pokemons
+const mapStateToProps = (state) => {
+  const { filterKeyword, filterLabel, offset, pokemons, loadedOffsets, isLoading } = state.pokemons
 
   const filterByName = pokemonList => pokemonList.filter(item => item.name.indexOf(filterKeyword) !== -1)
 
-  const filterByType = pokemonList => {
-    if (!filterLabel.length) return pokemonList
+  const filterByType = pokemonList => (
+    filterLabel.length
+      ? pokemonList.filter(pokemon => pokemon.types
+          .filter(pokemonType => pokemonType.type.name === filterLabel[0]).length)
+      : pokemonList
+  )
 
-    return pokemonList.filter(pokemon => pokemon.types
-			.filter(pokemonType => pokemonType.type.name === filterLabel[0]).length)
-
-    return pokemonList.filter(pokemon => {
-      const isTypeIsset = pokemon.types.filter(
-        pokemonType => pokemonType.type.name === filterLabel[0]
-      )
-      return isTypeIsset.length
-    })
+  const getFilteredPokemons = () => {
+    const start = offset + 1
+    const end = offset + 21
+    const currentPokemons = pokemons.filter(item => item.id >= start && item.id <= end)
+    return filterByName(filterByType(currentPokemons))
   }
 
   return {
-    isLoading: pokemons.isLoading,
-    pokemonList: filterByName(filterByType(pokemons.pokemons)),
-    offset: pokemons.offset,
-    filterLabel: pokemons.filterLabel[0]
+    pokemonList: getFilteredPokemons(),
+    filterLabel: filterLabel[0],
+    loadedOffsets,
+    isLoading,
+    offset
   }
 }
 

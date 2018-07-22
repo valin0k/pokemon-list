@@ -4,10 +4,10 @@ import {withHandlers} from 'recompose'
 
 const enhance = withHandlers({
 	handleNextClick: props => e => {
-		props.getPokemonList(props.offset + 20)
+		props.getPokemonList(props.offset + 20, props.loadedOffsets)
 	},
 	handlePrevClick: props => e => {
-		props.getPokemonList(props.offset - 20)
+		props.getPokemonList(props.offset - 20, props.loadedOffsets)
 	},
 })
 

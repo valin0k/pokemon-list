@@ -1,5 +1,5 @@
-import * as actionsTypes from 'app/reactTest/constants/AppConstants';
-import {handleActions} from 'redux-actions';
+import * as actionsTypes from 'app/reactTest/constants/AppConstants'
+import {handleActions} from 'redux-actions'
 
 const initialState = {
 	pokemons: [],
@@ -7,32 +7,27 @@ const initialState = {
 	filterKeyword: '',
 	isLoading: false,
 	filterLabel: [],
-	loadedPages: []
+  loadedOffsets: []
 };
 
 export default handleActions({
-	// [actionsTypes.GET_POKEMON_LIST]: (state, action) => ({
-	// 	...state,
-	// 	isLoading: false,
-	// 	pokemons: [],
-	// }),
 	[actionsTypes.GET_POKEMON_DATA]: (state, action) => ({
 		...state,
 		pokemons: state.pokemons.concat(action.payload.pokemons.map(pokemon => pokemon.data)),
 		offset: action.payload.offset,
-		loadedPages: state.loadedPages.concat(action.payload.offset / 20)
+    loadedOffsets: state.loadedOffsets.concat(action.payload.offset)
 	}),
-	// [actionsTypes.CLEAR_POKEMON_LIST]: (state) => ({
-	// 	...state,
-	// 	pokemons: [],
-	// }),
 	[actionsTypes.FILTER_POKEMONS]: (state, action) => ({
 		...state,
-		filterKeyword: action.payload,
+		filterKeyword: action.payload.keyword,
 	}),
+  [actionsTypes.CHANGE_OFFSET]: (state, action) => ({
+    ...state,
+    offset: action.payload.offset,
+  }),
 	[actionsTypes.ADD_TYPE_POKEMON]: (state, action) => ({
 		...state,
-		filterLabel: [action.payload],
+		filterLabel: [action.payload.type],
 	}),
 	[actionsTypes.REMOVE_TYPE_POKEMON]: (state) => ({
 		...state,
