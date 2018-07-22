@@ -7,23 +7,25 @@ const initialState = {
 	filterKeyword: '',
 	isLoading: false,
 	filterLabel: [],
+	loadedPages: []
 };
 
 export default handleActions({
-	[actionsTypes.GET_POKEMON_LIST]: (state, action) => ({
-		...state,
-		isLoading: false,
-		pokemons: [],
-	}),
+	// [actionsTypes.GET_POKEMON_LIST]: (state, action) => ({
+	// 	...state,
+	// 	isLoading: false,
+	// 	pokemons: [],
+	// }),
 	[actionsTypes.GET_POKEMON_DATA]: (state, action) => ({
 		...state,
-		pokemons: state.pokemons.concat(action.payload.data),
-		offset: action.offset,
+		pokemons: state.pokemons.concat(action.payload.pokemons.map(pokemon => pokemon.data)),
+		offset: action.payload.offset,
+		loadedPages: state.loadedPages.concat(action.payload.offset / 20)
 	}),
-	[actionsTypes.CLEAR_POKEMON_LIST]: (state) => ({
-		...state,
-		pokemons: [],
-	}),
+	// [actionsTypes.CLEAR_POKEMON_LIST]: (state) => ({
+	// 	...state,
+	// 	pokemons: [],
+	// }),
 	[actionsTypes.FILTER_POKEMONS]: (state, action) => ({
 		...state,
 		filterKeyword: action.payload,
@@ -48,4 +50,4 @@ export default handleActions({
 		...state,
 		isLoading: true,
 	}),
-}, initialState);
+}, initialState)

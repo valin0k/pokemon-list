@@ -2,63 +2,52 @@ import * as actionsTypes from 'app/reactTest/constants/AppConstants';
 import axios from 'axios';
 
 export const getPokemonList = (offset = 0) => (dispatch) => {
-	dispatch({
-		type: actionsTypes.START_LOADING,
-	});
+  dispatch({
+    type: actionsTypes.START_LOADING,
+  })
 
-	dispatch({
-		type: actionsTypes.CLEAR_POKEMON_LIST,
-	});
+  const apiUrl = `http://pokeapi.co/api/v2/pokemon?offset=${offset}`;
 
-	const apiUrl = `http://pokeapi.co/api/v2/pokemon?offset=${offset}`;
+  return axios(apiUrl)
+    .then(pokemonData => {
 
-	return axios(apiUrl, {
-		offset,
-	}).then((response) => {
-		if (response.data && response.data.results) {
-			const {results} = response.data;
-			const pokemonCount = results.length;
-
-			results.map((pokemon, i) => {
-    			axios(pokemon.url).then((pokemonData) => {
+      const promises = pokemonData.data.results.map(item => axios(item.url))
+      Promise.all(promises).then(pokemons => {
 				dispatch({
-        					type: actionsTypes.GET_POKEMON_DATA,
-        					payload: pokemonData,
-					offset,
-        				});
+					type: actionsTypes.GET_POKEMON_DATA,
+					payload: {
+						pokemons,
+						offset
+					}
+				})
 
-				if (pokemonCount === i + 1) {
-					dispatch({
-            			type: actionsTypes.END_LOADING,
-            		});
-				}
-    			});
-    		});
-		}
-	}).catch((error) => {
-		dispatch({
-			type: actionsTypes.ERROR_LOADING,
-		});
-		console.log('error: ', error);
-	});
-};
+        dispatch({
+          type: actionsTypes.END_LOADING,
+        })
+      })
+    }).catch((error) => {
+      dispatch({
+        type: actionsTypes.ERROR_LOADING,
+      })
+    })
+}
 
 export const filterPokemons = (keyword) => (dispatch) => {
-	dispatch({
-		type: actionsTypes.FILTER_POKEMONS,
-		payload: keyword.toLowerCase(),
-	});
+  dispatch({
+    type: actionsTypes.FILTER_POKEMONS,
+    payload: keyword.toLowerCase(),
+  });
 };
 
 export const addTypePokemon = (keyword) => (dispatch) => {
-	dispatch({
-		type: actionsTypes.ADD_TYPE_POKEMON,
-		payload: keyword.toLowerCase(),
-	});
+  dispatch({
+    type: actionsTypes.ADD_TYPE_POKEMON,
+    payload: keyword.toLowerCase(),
+  });
 };
 
 export const removeTypePokemon = () => (dispatch) => {
-	dispatch({
-		type: actionsTypes.REMOVE_TYPE_POKEMON,
-	});
+  dispatch({
+    type: actionsTypes.REMOVE_TYPE_POKEMON,
+  });
 };

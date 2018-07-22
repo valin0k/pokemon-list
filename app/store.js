@@ -1,19 +1,17 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
 import thunk from 'redux-thunk'
-
-import pokemonsReducer from 'app/reactTest/reducers/PokemonsReducer'
+import pokemons from 'app/reactTest/reducers/pokemons'
 
 const rootReducer = combineReducers({
-	pokemonsReducer,
-});
+	pokemons,
+})
 
 function configureStore(initialState) {
 	return createStore(
 		rootReducer,
 		initialState,
-    // applyMiddleware(thunk),
 		applyMiddleware(thunk),
-	);
+	)
 }
 
 export default configureStore({})

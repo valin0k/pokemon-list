@@ -1,41 +1,49 @@
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import PokemonListComponent from 'app/reactTest/components/PokemonListComponent';
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+import PokemonListComponent from "app/reactTest/components/PokemonListComponent"
 import {
-	getPokemonList,
-	filterPokemons,
-	addTypePokemon,
-	removeTypePokemon,
-} from 'app/reactTest/actions/PokemonsActions';
+  getPokemonList,
+  filterPokemons,
+  addTypePokemon,
+  removeTypePokemon
+} from "app/reactTest/actions/PokemonsActions"
 
-const mapStateToProps  = ({pokemonsReducer}) => {
-	const {filterKeyword, filterLabel} = pokemonsReducer;
+const mapStateToProps = ({ pokemons }) => {
+  const { filterKeyword, filterLabel } = pokemons
 
-	const filterByName = (pokemonList) => pokemonList.filter((item) => item.name.indexOf(filterKeyword) !== -1);
+  const filterByName = pokemonList => pokemonList.filter(item => item.name.indexOf(filterKeyword) !== -1)
 
-	const filterByType = (pokemonList) => {
-		if (!filterLabel.length) return pokemonList;
+  const filterByType = pokemonList => {
+    if (!filterLabel.length) return pokemonList
 
-		return pokemonList.filter((pokemon) => {
-			const isTypeIsset = pokemon.types.filter((pokemonType) => pokemonType.type.name === filterLabel[0]);
+    return pokemonList.filter(pokemon => pokemon.types
+			.filter(pokemonType => pokemonType.type.name === filterLabel[0]).length)
 
-			return isTypeIsset.length;
-		});
-	};
+    return pokemonList.filter(pokemon => {
+      const isTypeIsset = pokemon.types.filter(
+        pokemonType => pokemonType.type.name === filterLabel[0]
+      )
+      return isTypeIsset.length
+    })
+  }
 
-	return ({
-		isLoading: pokemonsReducer.isLoading,
-		pokemonList: filterByName(filterByType(pokemonsReducer.pokemons)),
-		offset: pokemonsReducer.offset,
-		filterLabel: pokemonsReducer.filterLabel[0],
-	});
-};
+  return {
+    isLoading: pokemons.isLoading,
+    pokemonList: filterByName(filterByType(pokemons.pokemons)),
+    offset: pokemons.offset,
+    filterLabel: pokemons.filterLabel[0]
+  }
+}
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-	getPokemonList,
-	filterPokemons,
-	addTypePokemon,
-	removeTypePokemon,
-}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+      getPokemonList,
+      filterPokemons,
+      addTypePokemon,
+      removeTypePokemon
+    }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(PokemonListComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PokemonListComponent)
