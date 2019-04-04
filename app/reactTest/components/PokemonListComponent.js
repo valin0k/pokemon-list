@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {lifecycle, compose, withHandlers} from 'recompose';
 import Pagination from 'app/reactTest/components/PaginationComponent';
+import PokemonListItem from './PokemonListItem'
 
 const enhance = compose(
 	withHandlers({
@@ -24,7 +25,7 @@ const enhance = compose(
 
 
 const CommentsComponent = enhance((props) => {
-	const {isLoading, pokemonList, filterLabel, handleLabelRemove, handleLabelSelect, handleChange} = props
+	const {isLoading, pokemonList, handleChange} = props
 		return (
       <div className="comments-container">
         <div className={isLoading ? 'ui active inverted dimmer' : 'ui inverted dimmer'}>
@@ -49,40 +50,8 @@ const CommentsComponent = enhance((props) => {
           </tr>
           </thead>
           <tbody>
-          {pokemonList ?
-            pokemonList.map((item, i) =>
-              <tr key={item.name}>
-                <td><img alt="pokemon" src={item.sprites.front_default} /></td>
-                <td>{item.name}</td>
-                <td>
-                  {item.types.map((itemType) => (
-                    <div
-                      key={itemType.type.name}
-                      className={filterLabel === itemType.type.name
-												? 'ui green label pokemon-type active'
-                        : 'ui green label pokemon-type'
-                      }
-                      onClick={() => filterLabel === itemType.type.name
-                        ?	handleLabelRemove(itemType.type.name)
-                        : handleLabelSelect(itemType.type.name)
-                      }
-                    >
-                      {itemType.type.name}
-                    </div>
-                  ))}
-                </td>
-                <td>
-                  {item.abilities.map((itemAbility) => (
-                    <div
-                      key={itemAbility.ability.name}
-                      className="ui grey label pokemon-ability"
-                    >
-                      {itemAbility.ability.name}
-                    </div>
-                  ))}
-                </td>
-              </tr>
-            )
+          {pokemonList
+						? pokemonList.map((item, i) => <PokemonListItem key={item.name} {...props} item={item} />)
             : <tr><td>Loading data...</td></tr>
           }
           </tbody>
