@@ -23,12 +23,19 @@ module.exports = {
 		},
 		],
 	},
-	resolve: {
-		root: __dirname,
-	},
 	devServer: {
+		proxy: {
+			'/v2/**': {
+				target: 'http://pokeapi.co/api/',
+				secure: false,
+				changeOrigin: true
+			}
+		},
 		historyApiFallback: true,
 		contentBase: './',
+	},
+	resolve: {
+		root: __dirname,
 	},
 	watch: true,
 	devtool: 'eval',

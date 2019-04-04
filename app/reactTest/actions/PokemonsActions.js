@@ -13,7 +13,7 @@ export const getPokemonList = (offset = 0, loadedOffsets) => (dispatch) => {
     type: actionsTypes.START_LOADING,
   })
 
-  const apiUrl = `http://pokeapi.co/api/v2/pokemon?offset=${offset}`
+  const apiUrl = `/v2/pokemon?offset=${offset}`
 
   return axios(apiUrl)
     .then(pokemonData => {
